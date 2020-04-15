@@ -15,42 +15,64 @@ void makethread(int num_threads ,vector<long> studentID, vector<double> Grade, s
 	// student_ID.push_back(1983);
 	// student_ID.push_back(1984);
   // student_ID.push_back(1985);
-	// grade.push_back(70);
-	// grade.push_back(99.4);
-	// grade.push_back(80);
-	// grade.push_back(100);
+	// //student_ID.push_back(1986);
+	//
+	// grade.push_back(99.8982);
+	// grade.push_back(99.1312);
+	// grade.push_back(99.1212);
+	// grade.push_back(20);
+	//grade.push_back(100);
 	//threads creation
 	pthread_t tid[num_threads];
 
 	int threadchunk=grade.size()/num_threads;
 	int lowerlimit=0;
 	int upperlimit=threadchunk;
-	thread_args *args=new thread_args;
+
 	for(int i=0;i<num_threads;i++){
+		thread_args *args=new thread_args;
+		if(i==num_threads-1 && upperlimit!=grade.size()){
+			upperlimit=grade.size();
+		}
+
 		args->A=&grade;
 		args->B=&student_ID;
 		args->lower_limit=lowerlimit;
 		args->upper_limit=upperlimit;
 		pthread_create(&tid[i],NULL,mergesort_thread,(void *)args);
-		lowerlimit=lowerlimit+threadchunk-1;
+		cout<<"lowerlimit"<<lowerlimit<<endl;
+		cout<<"upperlimit"<<upperlimit<<endl;
+		lowerlimit=lowerlimit+threadchunk;
 		upperlimit=upperlimit+threadchunk;
+
 	}
 
 	for(int i=0;i<num_threads;i++){
 		pthread_join(tid[i],NULL);
 
 	}
+
+
   //Merge threads together
-	// int low=0;
-  // int high=(threadchunk*2)-1;
-	// int mid=(low+high)/2;;
-	//
-	// for(int i=0;i<num_threads-1;i++){
-	// 	merge(&grade,&student_ID,low,mid,high);
-	// 	low=low+high;
-	// 	high=high+(threadchunk*2)-1;
-	// 	mid=(low+high)/2;
-	// }
+
+
+	for(int i=0;i<num_threads;i+=2){
+		  cout<<"hello"<<endl;
+
+		int low=i*threadchunk;
+		int high=(i+2)*threadchunk-1;
+		cout<<"low:"<<low<<endl;
+		cout<<"high"<<high<<endl;
+		int middle=(low+high)/2;
+		cout<<"middle:"<<middle<<endl;
+		if(high>=grade.size()){
+			high=grade.size()-1;
+		}
+		cout<<"made it";
+		merge(&grade,&student_ID,low,middle,high);
+
+	}
+
 
 
 	double average=Average(grade);

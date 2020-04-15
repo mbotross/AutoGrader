@@ -13,7 +13,7 @@ void mySort (int N, vector<double> *A,vector<long> *B)
 }
 
 void *mergesort_thread(void *args){
-  
+
   struct thread_args *temp=(thread_args *)args;
   mergesort(temp->A,temp->B,temp->lower_limit,temp->upper_limit-1);
 }
@@ -22,6 +22,8 @@ void mergesort(vector<double> *A, vector<long> *B, int low, int high){
 
 
   if(low<high){
+    // cout<<"low:"<<low<<endl;
+    // cout<<"high:"<<high<<endl;
     int mid=(low+high)/2;
     mergesort(A,B,low,mid);
     mergesort(A,B,mid+1,high);
@@ -32,7 +34,7 @@ void mergesort(vector<double> *A, vector<long> *B, int low, int high){
 
 
 void merge(vector<double> *A,vector<long> *B,  int low, int mid, int high){
-
+  cout<<"here";
 
   int i=low;
   int j=mid+1;
@@ -81,6 +83,7 @@ void merge(vector<double> *A,vector<long> *B,  int low, int mid, int high){
   for(int i=low;i<=high;i++){
     (*A)[i]=tmp[i-low];
     (*B)[i]=tmp2[i-low];
+
 
 
   }

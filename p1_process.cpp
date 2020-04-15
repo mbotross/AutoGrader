@@ -49,7 +49,6 @@ void get_statistics(std::string class_name[], int num_processes, int num_threads
 
 		int status;
 		pid_t pid=wait(&status);
-		//pid_t pid=wait(NULL);
 
 
 	}
