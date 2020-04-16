@@ -20,6 +20,7 @@ struct thread_args{
   int upper_limit;
 };
 void makethread(int num_threads ,vector <long> studentID, vector <double> Grade, string file_name);
+void merge_thread(int num_threads,int change, int threadchunk);
 double Average(vector<double> Grade);
 double Median(vector <double> Grade);
 double S_D(vector <double> Grade);

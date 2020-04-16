@@ -7,13 +7,14 @@
 #include <stdlib.h>
 #include <vector>
 #include "p1_threads.h"
+
 using namespace std;
 
 void *mergesort_thread(void *args);
 void mergesort(vector<double> *A,vector<long>*B,int low, int high);
 void merge(vector<double> *A,vector<long> *B, int low, int mid, int high);
 void mySort (int N, vector<double> *A, vector<long> *B);
-
+void merge2(vector<double>* A, vector<long>* B, int left, int middle, int right);
 
 #endif
 

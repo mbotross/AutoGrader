@@ -7,22 +7,39 @@ using namespace std;
 std::vector<long> student_ID;
 std::vector<double> grade;
 void makethread(int num_threads ,vector<long> studentID, vector<double> Grade, string file_name){
-	student_ID=studentID;
-	grade=Grade;
 
-	//call mergesort, with divided work based on number of threads
+
+	// //call mergesort, with divided work based on number of threads
+	student_ID.clear();
+	grade.clear();
+
+		for(int i=0;i<studentID.size();i++){
+	  	student_ID.push_back(studentID[i]);
+		  grade.push_back(Grade[i]);
+	}
+
 	// student_ID.push_back(1982);
 	// student_ID.push_back(1983);
 	// student_ID.push_back(1984);
   // student_ID.push_back(1985);
-	// //student_ID.push_back(1986);
+	// student_ID.push_back(1986);
+	// student_ID.push_back(1986);
+	// student_ID.push_back(1986);
+	// student_ID.push_back(1986);
+	// student_ID.push_back(1986);
 	//
 	// grade.push_back(99.8982);
 	// grade.push_back(99.1312);
 	// grade.push_back(99.1212);
 	// grade.push_back(20);
-	//grade.push_back(100);
+	// grade.push_back(100);
+	// grade.push_back(100);
+	// grade.push_back(100);
+	// grade.push_back(100);
+	// grade.push_back(100);
+
 	//threads creation
+
 	pthread_t tid[num_threads];
 
 	int threadchunk=grade.size()/num_threads;
@@ -31,7 +48,7 @@ void makethread(int num_threads ,vector<long> studentID, vector<double> Grade, s
 
 	for(int i=0;i<num_threads;i++){
 		thread_args *args=new thread_args;
-		if(i==num_threads-1 && upperlimit!=grade.size()){
+		if(upperlimit>grade.size()){
 			upperlimit=grade.size();
 		}
 
@@ -54,24 +71,7 @@ void makethread(int num_threads ,vector<long> studentID, vector<double> Grade, s
 
 
   //Merge threads together
-
-
-	for(int i=0;i<num_threads;i+=2){
-		  cout<<"hello"<<endl;
-
-		int low=i*threadchunk;
-		int high=(i+2)*threadchunk-1;
-		cout<<"low:"<<low<<endl;
-		cout<<"high"<<high<<endl;
-		int middle=(low+high)/2;
-		cout<<"middle:"<<middle<<endl;
-		if(high>=grade.size()){
-			high=grade.size()-1;
-		}
-		cout<<"made it";
-		merge(&grade,&student_ID,low,middle,high);
-
-	}
+ merge_thread(num_threads,1,threadchunk);
 
 
 
@@ -89,6 +89,29 @@ void makethread(int num_threads ,vector<long> studentID, vector<double> Grade, s
 }
 
 //after sorting
+
+void merge_thread(int num_threads,int change,int threadchunk){
+
+		for(int i=0;i<num_threads;i+=2){
+		  int low=i*threadchunk;
+			int high=(i+2)*threadchunk*change-1;
+			cout<<"low:"<<low<<endl;
+
+			if(high>=grade.size()){
+				high=grade.size()-1;
+			}
+			cout<<"high"<<high<<endl;
+			int middle=(low+high)/2;
+			cout<<"middle:"<<middle<<endl;
+
+			merge(&grade,&student_ID,low,middle,high);
+
+		}
+		if(num_threads/2>=1){
+				merge_thread(num_threads/2,change*2,threadchunk);
+		}
+
+}
 
 double Average(vector<double> Grade){
 	int size=Grade.size();
