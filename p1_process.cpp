@@ -18,7 +18,6 @@ void get_statistics(std::string class_name[], int num_processes, int num_threads
 
 
 	for(int i=0;i<num_processes;i++){
-		//pid_t pid=fork();
 		int pid=fork();
 		if(pid<0){
 			cout<<"Error"<<endl;
@@ -29,12 +28,12 @@ void get_statistics(std::string class_name[], int num_processes, int num_threads
 			printf("Child process is created. (pid: %d)\n",getpid());
 			//call thread function, passsing in num of threads,and two arrays of ID and Grade
 			if(i==num_processes-1 && num_processes<5){
-				//for(int i=num_processes-1;i<5;i++){
+				for(int i=num_processes-1;i<5;i++){
 				file_process(class_name,i);
 
 				makethread(num_threads,studentID,Grade,class_name[i]);
 
-				//}
+				}
 
 			}
 			else{
@@ -71,7 +70,7 @@ void file_process(std::string class_name[],int i){
 
 	filename="input/"+class_name[i]+".csv";
 	char file[filename.size()+1];
-	cout<<filename<<endl;
+//	cout<<filename<<endl;
 	strcpy(file,filename.c_str());
 	myfile.open(file);
 	getline(myfile,lines);
@@ -94,11 +93,11 @@ void file_process(std::string class_name[],int i){
 		//cout<<studentID[k]<<endl;
 		Grade.push_back(atof(result[1].c_str()));
 
+
 		k++;
 
-
-
 	}
+
 	myfile.close();
 
 

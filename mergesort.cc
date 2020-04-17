@@ -15,11 +15,17 @@ void mySort (int N, vector<double> *A,vector<long> *B)
 void *mergesort_thread(void *args){
 
   struct thread_args *temp=(thread_args *)args;
-  if(temp->lower_limit < temp->upper_limit-1){
+  int lowerlimit=temp->lower_limit;
+  int upperlimit=temp->upper_limit-1;
+  int mid=(lowerlimit+upperlimit)/2;
 
-    mergesort(temp->A,temp->B,temp->lower_limit,temp->upper_limit-1);
+  if(lowerlimit< upperlimit){
 
+    mergesort(temp->A,temp->B,lowerlimit,upperlimit);
+    //mergesort(temp->A,temp->B,lowerlimit+1,upperlimit);
+    //merge(temp->A,temp->B,lowerlimit,mid,upperlimit);
    }
+   return NULL;
 }
 
 void mergesort(vector<double> *A, vector<long> *B, int low, int high){

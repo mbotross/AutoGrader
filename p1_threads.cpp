@@ -9,7 +9,6 @@ std::vector<double> grade;
 void makethread(int num_threads ,vector<long> studentID, vector<double> Grade, string file_name){
 
 
-	// //call mergesort, with divided work based on number of threads
 	student_ID.clear();
 	grade.clear();
 
@@ -18,25 +17,6 @@ void makethread(int num_threads ,vector<long> studentID, vector<double> Grade, s
 		  grade.push_back(Grade[i]);
 	}
 
-	// student_ID.push_back(1982);
-	// student_ID.push_back(1983);
-	// student_ID.push_back(1984);
-  // student_ID.push_back(1985);
-	// student_ID.push_back(1986);
-	// student_ID.push_back(1986);
-	// student_ID.push_back(1986);
-	// student_ID.push_back(1986);
-	// student_ID.push_back(1986);
-	//
-	// grade.push_back(99.8982);
-	// grade.push_back(99.1312);
-	// grade.push_back(99.1212);
-	// grade.push_back(20);
-	// grade.push_back(100);
-	// grade.push_back(100);
-	// grade.push_back(100);
-	// grade.push_back(100);
-	// grade.push_back(100);
 
 	//threads creation
 
@@ -48,7 +28,7 @@ void makethread(int num_threads ,vector<long> studentID, vector<double> Grade, s
 
 	for(int i=0;i<num_threads;i++){
 		thread_args *args=new thread_args;
-		if(upperlimit>grade.size()){
+		if(i==num_threads-1 && upperlimit<grade.size()){
 			upperlimit=grade.size();
 		}
 
@@ -56,9 +36,10 @@ void makethread(int num_threads ,vector<long> studentID, vector<double> Grade, s
 		args->B=&student_ID;
 		args->lower_limit=lowerlimit;
 		args->upper_limit=upperlimit;
+		//call mergesort, with divided work based on number of threads
 		pthread_create(&tid[i],NULL,mergesort_thread,(void *)args);
-		cout<<"lowerlimit"<<lowerlimit<<endl;
-		cout<<"upperlimit"<<upperlimit<<endl;
+		//cout<<"lowerlimit"<<lowerlimit<<endl;
+		//cout<<"upperlimit"<<upperlimit<<endl;
 		lowerlimit=lowerlimit+threadchunk;
 		upperlimit=upperlimit+threadchunk;
 
@@ -79,10 +60,6 @@ void makethread(int num_threads ,vector<long> studentID, vector<double> Grade, s
 	double median=Median(grade);
 	double SD=S_D(grade);
 
-	cout<<"average: "<<average<<endl;
-	cout<<"median:  "<<median<<endl;
-	cout<<"SD: "<<SD<<endl;
-
 	//write to file
 	file_write1(file_name,SD,average,median);
 	file_write2(file_name,student_ID,grade);
@@ -93,16 +70,16 @@ void makethread(int num_threads ,vector<long> studentID, vector<double> Grade, s
 void merge_thread(int num_threads,int change,int threadchunk){
 
 		for(int i=0;i<num_threads;i+=2){
-		  int low=i*threadchunk;
+		  int low=i*threadchunk*change;
 			int high=(i+2)*threadchunk*change-1;
-			cout<<"low:"<<low<<endl;
+			//cout<<"low:"<<low<<endl;
 
 			if(high>=grade.size()){
 				high=grade.size()-1;
 			}
-			cout<<"high"<<high<<endl;
-			int middle=(low+high)/2;
-			cout<<"middle:"<<middle<<endl;
+			//cout<<"high"<<high<<endl;
+			int middle=low+(threadchunk*change)-1;
+			//cout<<"middle:"<<middle<<endl;
 
 			merge(&grade,&student_ID,low,middle,high);
 
@@ -169,7 +146,7 @@ void file_write2(string file_name,vector<long> studentID,vector<double>Grade){
 		int rank=1;
 		myfile<<"Rank,Student ID,Grade"<<endl;
 		for(int i=Grade.size()-1;i>=0;i--){
-				myfile<<rank<<","<<studentID[i]<<","<<Grade[i]<<endl;
+				myfile<<rank<<","<<studentID[i]<<","<<setprecision(15)<<Grade[i]<<endl;
 				rank++;
 
 
